@@ -35,22 +35,16 @@ object QueenProblem {
         }
         MR(0)(i) = j
       }
-      //печать (1<=i<=n МR(1, i)),
       for(i <- 0 until N) print(MR(0)(i) + ",")
-      SDVIG1(N, MR, 1, 1)
-      //печать (1<=i<=n МR(2, i)),
+      SDVIG1(N, MR, 2, 1)
       for(i <- 0 until N) print(MR(1)(i) + ",")
-      SDVIG1(N, MR, 2, 3)
-      //печать (1<=i<=n МR(3, i)),
+      SDVIG1(N, MR, 3, 3)
       for(i <- 0 until N) print(MR(2)(i) + ",")
-      SDVIG1(N, MR, 3, 2)
-      //печать (1<=i<=n МR(4, i)),
-      for(i <- 0 until N) print(MR(3)(i) + ",")
       SDVIG1(N, MR, 4, 2)
-      //печать (1<=i<=n МR(5, i)),
+      for(i <- 0 until N) print(MR(3)(i) + ",")
+      SDVIG1(N, MR, 5, 2)
       for(i <- 0 until N) print(MR(4)(i) + ",")
-      SDVIG1(N, MR, 5, 4)
-      //печать (1<=i<=n МR(6, i)),
+      SDVIG1(N, MR, 6, 4)
       for(i <- 0 until N) print(MR(5)(i) + ",")
 
     } else {
@@ -85,8 +79,7 @@ object QueenProblem {
     // 3 – сдвиг вниз   (верхняя горизонталь доски становится нижней горизонталью)
     // 4 – сдвиг вверх  (нижняя горизонталь доски становится верхней горизонталью)
 
-      var q = Q
-      q = q + 1
+      var q = Q + 1
 
       if (SD == 1) {
         for(i <- 0 until N) {
