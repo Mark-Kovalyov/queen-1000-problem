@@ -5,6 +5,8 @@
   */
 object QueenProblem {
 
+  def not(x : Boolean) : Boolean = !x
+
   def остаток(a : Int, b : Int): Int = a % b
 
   def нечетное(n : Int) : Boolean = n % 2 == 1
@@ -21,35 +23,35 @@ object QueenProblem {
       val m1 = 0
       val m2 = 2
       val n2 = N / 2
-      for(i <- 1 to N) {
+      for(i <- 0 until N) {
         var m3 = 0
         var j = 0
         if (i > n2) {
-          if (нечетное(i))
+          if (not (нечетное(i)))
             m3 = 1
           else
             m3 = -3
           j = (m1 + m3 + m2 * i) % N
         }
-        MR(1)(i) = j
+        MR(0)(i) = j
       }
       //печать (1<=i<=n МR(1, i)),
-      for(i <- 1 to N) print(MR(1)(i))
+      for(i <- 0 until N) print(MR(0)(i) + ",")
       SDVIG1(N, MR, 1, 1)
       //печать (1<=i<=n МR(2, i)),
-      for(i <- 1 to N) print(MR(2)(i))
+      for(i <- 0 until N) print(MR(1)(i) + ",")
       SDVIG1(N, MR, 2, 3)
       //печать (1<=i<=n МR(3, i)),
-      for(i <- 1 to N) print(MR(3)(i))
+      for(i <- 0 until N) print(MR(2)(i) + ",")
       SDVIG1(N, MR, 3, 2)
       //печать (1<=i<=n МR(4, i)),
-      for(i <- 1 to N) print(MR(4)(i))
+      for(i <- 0 until N) print(MR(3)(i) + ",")
       SDVIG1(N, MR, 4, 2)
       //печать (1<=i<=n МR(5, i)),
-      for(i <- 1 to N) print(MR(5)(i))
+      for(i <- 0 until N) print(MR(4)(i) + ",")
       SDVIG1(N, MR, 5, 4)
       //печать (1<=i<=n МR(6, i)),
-      for(i <- 1 to N) print(MR(6)(i))
+      for(i <- 0 until N) print(MR(5)(i) + ",")
 
     } else {
 
@@ -59,16 +61,16 @@ object QueenProblem {
       val n2 = N / 2
       val n1 = N - 1
 
-      for(i <- 1 to n1) {
+      for(i <- 0 until n1) {
         var m3 = 0
         if (i > n2) {
-          if (нечетное(i)) m3 = 1 else m3 = -3
+          if (not(нечетное(i))) m3 = 1 else m3 = -3
         }
-        MR(1)(i) = (m1 + m3 + m2 * i) % N
+        MR(0)(i) = (m1 + m3 + m2 * i) % N
       }
-      MR(1)(N) = 1
+      MR(0)(N - 1) = 1
       //печать (1<=i<=n МR(1, i)),
-      for(i <- 1 to N) print(MR(1)(i))
+      for(i <- 0 until N) print(MR(0)(i) + ",")
 
     }
   }
@@ -87,21 +89,21 @@ object QueenProblem {
       q = q + 1
 
       if (SD == 1) {
-        for(i <- 1 to N) {
+        for(i <- 0 until N) {
           МR (q)(i) = МR (q - 1)(i + 1)
           МR (q)(N) = МR (q - 1)(1)
         }
       }
 
       if (SD == 2) {
-        for(i <- 1 to N) {
+        for(i <- 0 until N) {
           МR (q)(i + 1) = МR (q - 1)(i)
           МR (q)(1) = МR (q - 1)(N)
         }
       }
 
       if (SD == 3) {
-        for(i <- 1 to N) {
+        for(i <- 0 until N) {
           МR(q)(i) = МR(q - 1)(i) + 1
           if (МR (q)(i) > N) {
             МR (q)(i) = 1
@@ -110,7 +112,7 @@ object QueenProblem {
       }
 
       if (SD == 4) {
-        for(i <- 1 to N) {
+        for(i <- 0 until N) {
           МR (q)(i) = МR (q - 1)(i) - 1
           if (МR (q)(i) < 0) {
             МR (q)( i) = N
