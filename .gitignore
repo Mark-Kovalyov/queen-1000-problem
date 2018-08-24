@@ -18,5 +18,20 @@
 *.tar.gz
 *.rar
 
+# Maven Shade temporary
+dependency-reduced-pom.xml
+
+# Idea files
+*.iml
+java/queen-problem/.idea
+java/queen-problem/target
+java/queen-problem/out
+
+java/Server/QueenSolver/.idea
+java/Server/QueenSolver/target
+
+# Scala files
+
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
