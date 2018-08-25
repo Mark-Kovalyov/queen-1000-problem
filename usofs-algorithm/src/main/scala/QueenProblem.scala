@@ -5,6 +5,8 @@
   */
 object QueenProblem {
 
+  def not(x : Boolean) : Boolean = !x
+
   def остаток(a : Int, b : Int): Int = a % b
 
   def нечетное(n : Int) : Boolean = n % 2 == 1
@@ -56,7 +58,7 @@ object QueenProblem {
       for(i <- 1 to n1) {
         var m3 = 0
         if (i > n2) {
-          if (нечетное(i)) m3 = 1 else m3 = -3
+          if (not(нечетное(i))) m3 = 1 else m3 = -3
         }
         MR(1)(i) = (m1 + m3 + m2 * i)
         if (MR(1)(i) > N) {
