@@ -58,7 +58,10 @@ object QueenProblem {
         if (i > n2) {
           if (нечетное(i)) m3 = 1 else m3 = -3
         }
-        MR(1)(i) = (m1 + m3 + m2 * i) % N
+        MR(1)(i) = (m1 + m3 + m2 * i)
+        if (MR(1)(i) > N) {
+          MR(1)(i) = MR(1)(i) - N
+        }
       }
       MR(1)(N) = 1
       //печать (1<=i<=n МR(1, i)),
