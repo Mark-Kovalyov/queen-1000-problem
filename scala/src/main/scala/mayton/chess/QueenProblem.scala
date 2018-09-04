@@ -20,9 +20,27 @@ import java.lang.Math._
   */
 object QueenProblem {
 
+  def rotateRight(positions : List[Pos]) : List[Pos] = {
+    // TODO: Implement
+    null
+  }
+
+  def swapHorizontal(positions : List[Pos]) : List[Pos] = {
+    // TODO: Implement
+    null
+  }
+
+
+
+
+
   // TODO: Fix
   def isCan(q: List[Int], size : Int) : Boolean = {
-    // Not implemented yet
+    // TODO: Transform list of integer to Positions
+    var arr = new Array[Pos](size)
+
+    // TODO: Rotate 4 times rigth, mirror vertical, horizontal, diagonal
+    //
     true
   }
 
@@ -136,13 +154,16 @@ object QueenProblem {
     else {
       val start = Instant.now
       n = args(0).toInt
+      if (args.length > 1) {
+        ckcan = if (args(0) == "Y") true else false
+      }
       process(0, (0 until n).toList)
       val end = Instant.now
       println("=======================================================")
-      printf("Solutions           : %d\n", sol)
+      printf(s"Solutions           : $sol\n")
       printf("Canonical solutions : %s\n", if (!ckcan) "Unknown" else "" + solcan)
       val elapsed = Duration.between(start, end).toMillis
-      printf("Elapsed time   : %s ms\n", elapsed)
+      printf("Elapsed time   : $elapsed ms\n")
       printf("AVG speed      : %d solutions/s\n", 1000L * sol / elapsed)
     }
   }
