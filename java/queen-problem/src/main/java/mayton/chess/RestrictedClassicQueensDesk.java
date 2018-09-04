@@ -76,6 +76,12 @@ public class RestrictedClassicQueensDesk extends RestrictedQueensDesk {
         if (vertical[x]) {
             return true;
         }
+        if (rightDiagonal[calcRightDiagonal(x,y)]){
+            return true;
+        }
+        if (leftDiagonal[calcLeftDiagonal(x,y)]) {
+            return true;
+        }
         // TODO
 
         return false;

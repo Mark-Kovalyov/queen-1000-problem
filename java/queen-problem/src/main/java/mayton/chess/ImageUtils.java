@@ -35,6 +35,8 @@ public class ImageUtils {
         Color GREEN = Color.GREEN;
         Color BLACK = Color.BLACK;
         Color GRAY = Color.LIGHT_GRAY;
+        Color CYAN = Color.CYAN;
+        Color RED = Color.RED;
 
         // Fill black back
         g.setColor(BLACK);
@@ -49,9 +51,9 @@ public class ImageUtils {
                 if (iqd.getValue(x, y)) {
                     g.setColor(BLACK);
                 } else if (iqd.isUnderFire(x, y)) {
-                    g.setColor(YELLOW);
+                    g.setColor(RED);
                 } else {
-                    g.setColor(GREEN);
+                    g.setColor(CYAN);
                 }
 
                 g.fillRect(xx, yy, cellSize - 1, cellSize - 1);

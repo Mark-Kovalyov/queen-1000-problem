@@ -120,6 +120,7 @@
                     <target>${java.target.version}</target>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
