@@ -61,7 +61,10 @@ public class MtnQueensGenerator {
     int printedSolutions          = 0;
     int recursiveProcessCallbacks = 0;
     int canonicalSolutions        = 0;
+    int torusSolutions            = 0;
+
     boolean checkCanonical        = false;
+    boolean checkTorus            = false;
     int n = -1;
 
     Deque<Integer> selected = new ArrayDeque<>();
@@ -192,6 +195,13 @@ public class MtnQueensGenerator {
                 } else {
                     printSolution(selected, level);
                 }
+                if (checkTorus) {
+                    TorusChecker torusChecker = new TorusChecker(n);
+                    if (torusChecker.isTorus(selected.iterator())) {
+                        torusSolutions++;
+                        logger.info("Found torus solution : {}", ReportUtils.formatQueens(selected.stream()));
+                    }
+                }
             }
         } else {
             // dequeA       newCandidate      dequeB
@@ -227,12 +237,14 @@ public class MtnQueensGenerator {
             out.println("     CC              : check and print only canonical solutions (string)");
             out.println("     PD              : print detailed report like a matrix (string)");
             out.println("     PS              : print summary report (string)");
+            out.println("     CT              : check torus");
             out.println("     SO              : suppress all text output");
         } else {
             Instant start = Instant.now();
             MtnQueensGenerator generator = new MtnQueensGenerator(parseInt(args[0]));
             int argcnt = 1;
             while(argcnt < args.length) {
+                if ("CT".equalsIgnoreCase(args[argcnt])) generator.checkTorus     = true;
                 if ("CC".equalsIgnoreCase(args[argcnt])) generator.checkCanonical = true;
                 if ("PD".equalsIgnoreCase(args[argcnt])) generator.printDetailed  = true;
                 if ("PS".equalsIgnoreCase(args[argcnt])) generator.printSummary   = true;
@@ -245,6 +257,7 @@ public class MtnQueensGenerator {
                 out.println("=======================================================");
                 out.printf("Solutions           : %d\n", generator.solutions);
                 out.printf("Canonical solutions : %s\n", !generator.checkCanonical ? "Unknown" : valueOf(generator.canonicalSolutions));
+                out.printf("Torus solutions     : %d\n", generator.torusSolutions);
                 long elapsed = Duration.between(start, end).toMillis();
                 out.printf("Elapsed time   : %s ms\n", elapsed);
                 out.printf("AVG speed      : %d solutions/s\n", 1000L * generator.solutions / elapsed);

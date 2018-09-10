@@ -1,7 +1,7 @@
 package mayton.chess;
 
+import mayton.chess.datastructures.RestrictedClassicQueensDesk;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 

@@ -1,5 +1,6 @@
 package mayton.chess;
 
+import mayton.chess.datastructures.QueensDesk;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;

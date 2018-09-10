@@ -1,6 +1,10 @@
 package mayton.chess;
 
 
+import mayton.chess.datastructures.Rectangle;
+import mayton.chess.datastructures.RestrictedClassicQueensDesk;
+import mayton.chess.datastructures.RestrictedQueensDesk;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -21,7 +25,7 @@ public class ImageUtils {
     }
 
 
-    public static void writeImage(OutputStream os, RestrictedClassicQueensDesk iqd) throws IOException {
+    public static void writeImage(OutputStream os, RestrictedQueensDesk iqd) throws IOException {
 
         int size = iqd.getSize();
 
