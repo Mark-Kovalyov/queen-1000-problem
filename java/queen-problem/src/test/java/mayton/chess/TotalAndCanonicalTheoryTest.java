@@ -1,8 +1,8 @@
 package mayton.chess;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
+import mayton.chess.tools.NullOutputStream;
+import mayton.chess.tools.NullPrintStream;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.junit.experimental.theories.DataPoint;
 import org.junit.experimental.theories.Theories;

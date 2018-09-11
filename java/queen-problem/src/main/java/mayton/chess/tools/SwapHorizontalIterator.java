@@ -1,4 +1,6 @@
-package mayton.chess;
+package mayton.chess.tools;
+
+import mayton.chess.datastructures.Position;
 
 import java.util.Iterator;
 

@@ -9,7 +9,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RestrictedClassicQueensDeskTest {
+public class RestrictedClassicChessDeskTest {
 
     @Test
     public void test_01_HorizonalAndVerticalFire() {

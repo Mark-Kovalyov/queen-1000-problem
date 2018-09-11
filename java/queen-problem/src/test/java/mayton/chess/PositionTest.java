@@ -1,5 +1,6 @@
 package mayton.chess;
 
+import mayton.chess.datastructures.Position;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

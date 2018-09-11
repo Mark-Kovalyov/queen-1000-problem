@@ -47,6 +47,7 @@ public class RestrictedClassicQueensDesk extends RestrictedQueensDesk {
         }
     }
 
+    // TODO: Simplify with Guava checks
     private int calcLeftDiagonal(int x, int y) {
         if (x < 0 || x >= size){
             throw new IllegalArgumentException("Out of range. Unable calculate diagonal position with x = " + x);

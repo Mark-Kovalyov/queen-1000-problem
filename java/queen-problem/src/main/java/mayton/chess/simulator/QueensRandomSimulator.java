@@ -1,18 +1,23 @@
 package mayton.chess.simulator;
 
-import mayton.chess.ImageUtils;
+import mayton.chess.tools.ImageUtils;
 import mayton.chess.datastructures.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Random;
 
 import static java.lang.String.format;
+import static mayton.chess.Constants.IMAGES_ROOT;
+import static mayton.chess.Constants.REPORTS_ROOT;
 
 public class QueensRandomSimulator {
 
@@ -71,47 +76,55 @@ public class QueensRandomSimulator {
 
         if (!breakByOverflow) {
 
-            new File("images/"+technology).mkdirs();
-            ImageUtils.writeImage(new FileOutputStream("images/" + technology + "/" + filename + ".png"), iqd);
+            Path path = Paths.get(IMAGES_ROOT + "/" + technology);
+            Files.createDirectories(path);
 
-            for (int x = 0; x < size; x++) {
-                for (int y = 0; y < size; y++) {
-                    if (iqd.getValue(x, y) || iqd.isUnderFire(x, y)) {
-                        cellsUnderFire++;
-                    }
-                }
-            }
+            ImageUtils.writeImage(new FileOutputStream(IMAGES_ROOT + "/" + technology + "/" + filename + ".png"), iqd);
 
-            int square = size * size;
+            cellsUnderFire = calculateCellsUnderFire(iqd, size, cellsUnderFire);
 
-            Object[] objects = new Object[5];
-            objects[0] = queensPercent;
-            objects[1] = queens;
-            objects[2] = cellsUnderFire;
-            objects[3] = square;
-            objects[4] = (double) cellsUnderFire / (double) square;
-
-            csvPrinter.printRecord(objects);
+            printReportRecord(csvPrinter, queensPercent, size, queens, cellsUnderFire);
 
         }
 
         return breakByOverflow;
     }
 
+    private static int calculateCellsUnderFire(RestrictedQueensDesk iqd, int size, int cellsUnderFire) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (iqd.getValue(x, y) || iqd.isUnderFire(x, y)) {
+                    cellsUnderFire++;
+                }
+            }
+        }
+        return cellsUnderFire;
+    }
 
+    private static void printReportRecord(CSVPrinter csvPrinter, int queensPercent, int size, int queens, int cellsUnderFire) throws IOException {
+        int square = size * size;
+
+        Object[] objects = new Object[5];
+        objects[0] = queensPercent;
+        objects[1] = queens;
+        objects[2] = cellsUnderFire;
+        objects[3] = square;
+        objects[4] = (double) cellsUnderFire / (double) square;
+
+        csvPrinter.printRecord(objects);
+    }
 
 
     public static void main(String[] args) throws Exception {
 
         int SIZE = 250;
 
-        RestrictedQueensDeskFactory classicFactory = new RestrictedClassicQueensDeskFactory(SIZE);
-        RestrictedQueensDeskFactory torusFactory = new RestrictedTorusQueensDeskFactory(SIZE);
+        simulateCustomRestrictedDesk("torus", 100, 1, SIZE,
+                new RestrictedTorusQueensDeskFactory(SIZE));
 
-        simulateCustomRestrictedDesk("torus", 100, 1, SIZE, torusFactory);
-        simulateCustomRestrictedDesk("classic", 100, 1, SIZE, classicFactory);
+        simulateCustomRestrictedDesk("classic", 100, 1, SIZE,
+                new RestrictedClassicQueensDeskFactory(SIZE));
 
-        return;
 
     }
 
@@ -119,11 +132,12 @@ public class QueensRandomSimulator {
             String technologyStack, int percentGep, int step, int size,
             RestrictedQueensDeskFactory factory) throws Exception {
 
-        new File("reports/"+technologyStack).mkdirs();
+        Path path = Paths.get(REPORTS_ROOT + "/"+technologyStack);
+        Files.createDirectories(path);
 
         CSVPrinter csvPrinter = new CSVPrinter(
                 new PrintWriter(
-                        format("reports/%s/%s-density-report-%dx%d.csv",
+                        format(REPORTS_ROOT + "/%s/%s-density-report-%dx%d.csv",
                                 technologyStack,
                                 technologyStack,
                                 size,

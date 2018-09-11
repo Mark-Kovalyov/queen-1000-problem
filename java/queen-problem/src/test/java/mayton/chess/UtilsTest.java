@@ -1,6 +1,7 @@
 package mayton.chess;
 
-import org.apache.commons.lang3.builder.ToStringExclude;
+import mayton.chess.datastructures.Position;
+import mayton.chess.tools.Utils;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

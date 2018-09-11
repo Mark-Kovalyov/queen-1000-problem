@@ -1,4 +1,4 @@
-package mayton.chess;
+package mayton.chess.tools;
 
 import javax.annotation.Nonnull;
 import java.util.List;

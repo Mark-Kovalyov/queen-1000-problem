@@ -1,4 +1,4 @@
-package mayton.chess;
+package mayton.chess.tools;
 
 import java.io.OutputStream;
 import java.io.PrintStream;

@@ -1,5 +1,7 @@
 package mayton.chess;
 
+import mayton.chess.tools.CanonicalChecker;
+import mayton.chess.tools.Utils;
 import org.junit.FixMethodOrder;
 import org.junit.Ignore;
 import org.junit.Test;

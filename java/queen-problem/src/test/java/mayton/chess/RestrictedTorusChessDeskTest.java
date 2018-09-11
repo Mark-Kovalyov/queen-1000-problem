@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class RestrictedTorusQueensDeskTest {
+public class RestrictedTorusChessDeskTest {
 
     @Test
     public void test_00_00(){

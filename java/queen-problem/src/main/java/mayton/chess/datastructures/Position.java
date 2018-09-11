@@ -1,4 +1,4 @@
-package mayton.chess;
+package mayton.chess.datastructures;
 
 import javax.annotation.concurrent.Immutable;
 

@@ -1,4 +1,6 @@
-package mayton.chess;
+package mayton.chess.tools;
+
+import mayton.chess.datastructures.Position;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -16,7 +18,7 @@ public class Utils {
     }
 
     @Nonnull
-    static <T> Stream<T> iteratorToStream(Iterator<T> iterator) {
+    public static <T> Stream<T> iteratorToStream(Iterator<T> iterator) {
         return StreamSupport.stream(
                 Spliterators.spliteratorUnknownSize(iterator, Spliterator.ORDERED),
                 false);

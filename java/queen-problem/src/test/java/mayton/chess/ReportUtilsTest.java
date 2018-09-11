@@ -1,13 +1,12 @@
 package mayton.chess;
 
-import org.junit.Before;
+import mayton.chess.tools.ReportUtils;
+import mayton.chess.tools.Utils;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 

@@ -1,6 +1,6 @@
 package mayton.chess.datastructures;
 
-public abstract class RestrictedQueensDesk extends QueensDesk {
+public abstract class RestrictedQueensDesk extends ChessDesk {
 
     public RestrictedQueensDesk(int size) {
         super(size);

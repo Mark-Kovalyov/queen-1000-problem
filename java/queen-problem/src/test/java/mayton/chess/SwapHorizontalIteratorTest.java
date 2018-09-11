@@ -1,5 +1,7 @@
 package mayton.chess;
 
+import mayton.chess.datastructures.Position;
+import mayton.chess.tools.SwapHorizontalIterator;
 import org.junit.Test;
 
 import java.util.Iterator;

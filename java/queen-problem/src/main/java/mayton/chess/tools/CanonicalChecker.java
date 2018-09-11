@@ -1,10 +1,19 @@
-package mayton.chess;
+package mayton.chess.tools;
+
+import mayton.chess.MtnQueensGenerator;
+import mayton.chess.datastructures.Position;
+import mayton.chess.tools.RotateIterator;
+import mayton.chess.tools.SwapHorizontalIterator;
+import mayton.chess.tools.Utils;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import static mayton.chess.Constants.MIN_QUEEN_DESK_SIZE;
+
+// TODO: Complete
 public class CanonicalChecker {
 
     private static final int ROTATES = 4;
@@ -12,7 +21,7 @@ public class CanonicalChecker {
     private int[] argumentArray;
 
     public CanonicalChecker(int size) {
-        if (size < MtnQueensGenerator.MIN_QUEEN_DESK_SIZE) {
+        if (size < MIN_QUEEN_DESK_SIZE) {
             throw new IllegalArgumentException();
         }
         this.size = size;

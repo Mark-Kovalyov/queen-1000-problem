@@ -1,10 +1,11 @@
 package mayton.chess;
 
+import mayton.chess.datastructures.Position;
+import mayton.chess.tools.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
 import java.io.PrintStream;
 import java.time.Duration;
 import java.time.Instant;
@@ -18,8 +19,9 @@ import static java.lang.Math.abs;
 import static java.lang.String.valueOf;
 import static java.lang.System.out;
 import static java.util.stream.Stream.concat;
-import static mayton.chess.ReportUtils.formatOffset;
-import static mayton.chess.ReportUtils.formatQueens;
+import static mayton.chess.Constants.MIN_QUEEN_DESK_SIZE;
+import static mayton.chess.tools.ReportUtils.formatOffset;
+import static mayton.chess.tools.ReportUtils.formatQueens;
 
 /**
  * See:
@@ -53,7 +55,7 @@ import static mayton.chess.ReportUtils.formatQueens;
  */
 public class MtnQueensGenerator {
 
-    static final int MIN_QUEEN_DESK_SIZE = 5;
+
     static Logger logger = LoggerFactory.getLogger(MtnQueensGenerator.class);
 
     PrintStream outstream = System.out;
@@ -117,7 +119,6 @@ public class MtnQueensGenerator {
         // Sorting (Phase-3)
         Collections.sort(candidatesStr);
         boolean res = candidateStr.equals(candidatesStr.get(0));
-        //out.printf("Canonical: %s\tCandidate: %s\tSolution : %3d\n" , candidatesStr.get(0), candidateStr, solutions);
         return res;
     }
 

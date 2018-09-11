@@ -3,12 +3,12 @@ package mayton.chess.datastructures;
 import javax.annotation.concurrent.NotThreadSafe;
 
 @NotThreadSafe
-public class QueensDesk {
+public class ChessDesk {
 
     protected int size;
     private boolean[] cells;
 
-    public QueensDesk(int size) {
+    public ChessDesk(int size) {
         this.size = size;
         cells = new boolean[size * size];
     }
@@ -17,6 +17,7 @@ public class QueensDesk {
         return size;
     }
 
+    // TODO: Simplify with Guava checks
     public void setValue(int x,int y){
         if (x < 0 || x >= size){
             throw new IllegalArgumentException("Out of range. Unable to set position with x = " + x);
