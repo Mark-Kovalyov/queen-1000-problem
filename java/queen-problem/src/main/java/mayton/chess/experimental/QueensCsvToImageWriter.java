@@ -21,7 +21,7 @@ public class QueensCsvToImageWriter {
 
         String csvFile   = args[0];
         String imageFile = args[1];
-        int n = Integer.valueOf(args[2]);
+        int n = Integer.parseInt(args[2]);
 
         logger.info("Processing csv file {} with size {}", csvFile, n);
 
@@ -36,7 +36,7 @@ public class QueensCsvToImageWriter {
         // TODO: Test
         for(String position : positions) {
             if (!position.isEmpty()) {
-                x = Integer.valueOf(position);
+                x = Integer.parseInt(position);
                 if (!iqd.tryToSetQueen(x, y)) throw new Exception("Aborted! Unable to set queen!");
                 y++;
             }

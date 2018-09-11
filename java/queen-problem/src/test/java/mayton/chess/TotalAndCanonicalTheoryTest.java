@@ -28,13 +28,12 @@ public class TotalAndCanonicalTheoryTest {
     public void checkTheory(Triple<Integer,Integer,Integer> dataPoint) {
         int n         = dataPoint.getLeft();
         int total     = dataPoint.getMiddle();
-        int canonical = dataPoint.getRight();
 
         MtnQueensGenerator generator = new MtnQueensGenerator(n);
         generator.outstream = new NullPrintStream(new NullOutputStream());
         generator.checkCanonical = true;
         generator.process(0, IntStream.range(0, n).boxed());
         assertEquals(total, generator.solutions);
-        //assertEquals(canonical, generator.canonicalSolutions);
+        // TODO: Continue
     }
 }

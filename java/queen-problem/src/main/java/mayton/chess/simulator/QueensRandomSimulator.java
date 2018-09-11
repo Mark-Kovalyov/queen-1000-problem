@@ -1,5 +1,9 @@
 package mayton.chess.simulator;
 
+import mayton.chess.reporting.ExcelQueenReportWriter;
+import mayton.chess.reporting.GithubQueenReportWriter;
+import mayton.chess.reporting.QueenReportEntity;
+import mayton.chess.reporting.QueenReportWriter;
 import mayton.chess.tools.ImageUtils;
 import mayton.chess.datastructures.*;
 import org.apache.commons.csv.CSVFormat;
@@ -10,12 +14,17 @@ import org.slf4j.LoggerFactory;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static java.lang.String.format;
+import static java.lang.String.valueOf;
+import static java.util.Arrays.asList;
 import static mayton.chess.Constants.IMAGES_ROOT;
 import static mayton.chess.Constants.REPORTS_ROOT;
 
@@ -29,7 +38,7 @@ public class QueensRandomSimulator {
 
     public static boolean drawDesk(
                                 RestrictedQueensDeskFactory factory,
-                                CSVPrinter csvPrinter,
+                                List<QueenReportWriter> queenReportWriters,
                                 int queensPercent,
                                 int queensGap,
                                 String filename,
@@ -83,7 +92,17 @@ public class QueensRandomSimulator {
 
             cellsUnderFire = calculateCellsUnderFire(iqd, size, cellsUnderFire);
 
-            printReportRecord(csvPrinter, queensPercent, size, queens, cellsUnderFire);
+            int square = size * size;
+
+            for(QueenReportWriter queenReportWriter : queenReportWriters) {
+                queenReportWriter.writeEntity(
+                        new QueenReportEntity(
+                                valueOf(queensPercent),
+                                valueOf(queens),
+                                valueOf(cellsUnderFire),
+                                valueOf(square),
+                                valueOf((double) cellsUnderFire / (double) square)));
+            }
 
         }
 
@@ -100,20 +119,6 @@ public class QueensRandomSimulator {
         }
         return cellsUnderFire;
     }
-
-    private static void printReportRecord(CSVPrinter csvPrinter, int queensPercent, int size, int queens, int cellsUnderFire) throws IOException {
-        int square = size * size;
-
-        Object[] objects = new Object[5];
-        objects[0] = queensPercent;
-        objects[1] = queens;
-        objects[2] = cellsUnderFire;
-        objects[3] = square;
-        objects[4] = (double) cellsUnderFire / (double) square;
-
-        csvPrinter.printRecord(objects);
-    }
-
 
     public static void main(String[] args) throws Exception {
 
@@ -135,41 +140,38 @@ public class QueensRandomSimulator {
         Path path = Paths.get(REPORTS_ROOT + "/"+technologyStack);
         Files.createDirectories(path);
 
-        CSVPrinter csvPrinter = new CSVPrinter(
-                new PrintWriter(
+        try(QueenReportWriter qrwEx = new ExcelQueenReportWriter(
+                    new PrintWriter(
                         format(REPORTS_ROOT + "/%s/%s-density-report-%dx%d.csv",
-                                technologyStack,
-                                technologyStack,
+                        technologyStack,
+                        technologyStack,
+                        size,
+                        size)));
+
+            /*
+            QueenReportWriter qrwHub = new GithubQueenReportWriter(
+                    new PrintWriter(
+                        format(REPORTS_ROOT + "/" + technologyStack + "/README.md" )))*/
+                        ) {
+
+            for (int i = 0; i <= percentGep; i += step) {
+                boolean breakByOverflow = drawDesk(
+                        factory,
+                        asList(qrwEx),
+                        i,
+                        (i * size) / 100,
+                        format(technologyStack + "desk-%dx%d-with-%03d-percent-quens-filling",
                                 size,
-                                size)),
-                        CSVFormat.EXCEL.
-                                withHeader(
-                                        "Quenns(%)",
-                                        "Queens",
-                                        "Cells Under Fire(CUF)",
-                                        "Desk Space(DS)",
-                                        "CUF/DS ratio"));
+                                size,
+                                i
+                        ),
+                        technologyStack
+                );
 
-
-        for(int i = 0; i <= percentGep; i += step) {
-
-            boolean breakByOverflow = drawDesk(
-                    factory,
-                    csvPrinter,
-                    i,
-                    (i * size) / 100,
-                    format(technologyStack + "desk-%dx%d-with-%03d-percent-quens-filling",
-                        size,
-                        size,
-                        i
-                    ),
-                    technologyStack
-            );
-
-            if (breakByOverflow) break;
+                if (breakByOverflow) break;
+            }
         }
 
-        csvPrinter.close();
     }
 
 }

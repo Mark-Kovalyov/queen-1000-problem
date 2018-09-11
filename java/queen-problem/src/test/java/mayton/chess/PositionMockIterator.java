@@ -17,7 +17,7 @@ public class PositionMockIterator implements Iterator<Position> {
         List<Position> positionList = new ArrayList<>();
         int y = 0;
         for(String item : s){
-            positionList.add(new Position(valueOf(item), y));
+            positionList.add(new Position(Integer.parseInt(item), y));
             y++;
         }
         iterator = positionList.iterator();
