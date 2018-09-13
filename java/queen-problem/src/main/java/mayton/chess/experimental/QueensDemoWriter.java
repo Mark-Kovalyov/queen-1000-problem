@@ -2,6 +2,7 @@ package mayton.chess.experimental;
 
 import com.jbrown.image2avi.core.AVIOutputStream;
 import com.jbrown.image2avi.core.VideoFormat;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,6 +10,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Map;
 import java.util.Random;
 
 import static mayton.chess.Constants.VIDEO_ROOT;
@@ -28,19 +32,54 @@ public class QueensDemoWriter {
     //           -strict experimental
     //           -b:a 192k
     //           -metadata title="A movie by Frdric_Lvesque" output.mp4
-    public static void main(String[] args ) throws IOException {
+    public static void main(String[] args ) throws IOException, InterruptedException {
 
-        generate();
-
-    }
-
-    private static void generate() throws IOException {
         int WIDTH = 1600 / 4;
         int HEIGHT = 900 / 4;
 
-        Random r = new Random();
-
         File outputFile = new File(VIDEO_ROOT + "/queen-250x250.avi");
+
+        generate(outputFile, WIDTH, HEIGHT);
+
+        compressVideo(outputFile, WIDTH, HEIGHT);
+
+    }
+
+    private static void compressVideo(File outputFile, int WIDTH, int HEIGHT) throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder("ffmpeg",
+                        "-i",
+                        "video/queen-250x250.avi" +
+                        "-vcodec" +
+                        "h264" +
+                        "-an",
+                        "video/queen-250x250-h264.mp4",
+                        "2>&1"
+        );
+        //Map<String, String> env = pb.environment();
+        //env.put("VAR1", "myValue");
+        //env.remove("OTHERVAR");
+        //env.put("VAR2", env.get("VAR1") + "suffix");
+        //pb.directory(new File("myDir"));
+        //File log = new File("log");
+        //pb.redirectErrorStream(true);
+        //pb.redirectOutput(Redirect.appendTo(log));
+        Process p = pb.start();
+        //OutputStream in = p.getOutputStream();
+        InputStream out  = p.getInputStream();
+        //InputStream err  = p.getErrorStream();
+        IOUtils.copy(out, System.out);
+
+        int res = p.waitFor();
+
+        logger.info("res = {}", res);
+
+    }
+
+    private static void generate(File outputFile, int WIDTH, int HEIGHT) throws IOException {
+
+
+        Random r = new Random();
 
         AVIOutputStream out = new AVIOutputStream(outputFile, VideoFormat.RAW);
 
@@ -50,7 +89,7 @@ public class QueensDemoWriter {
         out.setTimeScale(1);
         out.setFrameRate(30);
 
-        for (int k = 0; k<200; k++) {
+        for (int k = 0; k<2000; k++) {
 
             logger.info(":: Frame # {}", k);
 

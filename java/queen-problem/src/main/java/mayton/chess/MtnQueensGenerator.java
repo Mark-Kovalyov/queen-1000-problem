@@ -67,6 +67,9 @@ public class MtnQueensGenerator {
 
     boolean checkCanonical        = false;
     boolean checkTorus            = false;
+    boolean filterCanonical       = false;
+    boolean filterTorus           = false;
+
     int n = -1;
 
     Deque<Integer> selected = new ArrayDeque<>();
@@ -78,6 +81,7 @@ public class MtnQueensGenerator {
     boolean stopAfter      = false;
     static int solutionsThreshold = 100;
     boolean printSummary   = false;
+
 
     public MtnQueensGenerator(int n) {
         if (n < MIN_QUEEN_DESK_SIZE) throw new IllegalArgumentException();
@@ -149,35 +153,57 @@ public class MtnQueensGenerator {
         return true;
     }
 
-    public void printSolution(@Nonnull Deque<Integer> queens, int level) {
+    public void printSolution(@Nonnull Deque<Integer> queens, int level, boolean isCanonical, boolean isTorus) {
+
         String placeholder = "";
+
         if (indentSolutions) {
             placeholder = formatOffset(level, ' ');
             outstream.print(placeholder);
         }
-        outstream.println(formatQueens(queens.stream()));
-        if (printDetailed) {
-            outstream.println(formatOffset(level, '-'));
-            int n = queens.size();
-            Iterator<Integer> iterator = queens.iterator();
-            while(iterator.hasNext()){
-                if (indentSolutions) {
-                    outstream.print(placeholder);
-                }
-                outstream.print("{");
-                int value = iterator.next();
-                for (int j = 0; j < n; j++) {
-                    outstream.print(value == j ? "'Q'" : "'*'");
-                    outstream.print(",");
-                }
-                outstream.println("},");
-            }
-            outstream.println();
+
+        outstream.print(formatQueens(queens.stream()));
+
+        if (isCanonical) {
+            outstream.print(" C");
         }
+
+        if (isTorus) {
+            outstream.print(" T");
+        }
+
+        outstream.println();
+
+        if (printDetailed) {
+            printDetailed(queens, level, placeholder);
+        }
+
         printedSolutions++;
+
         if (stopAfter && printedSolutions >= solutionsThreshold) {
             System.exit(0);
         }
+    }
+
+    private void printDetailed(@Nonnull Deque<Integer> queens, int level, String placeholder) {
+
+        outstream.println(formatOffset(level, '-'));
+        int n = queens.size();
+        Iterator<Integer> iterator = queens.iterator();
+
+        while(iterator.hasNext()){
+            if (indentSolutions) {
+                outstream.print(placeholder);
+            }
+            outstream.print("{");
+            int value = iterator.next();
+            for (int j = 0; j < n; j++) {
+                outstream.print(value == j ? "'Q'" : "'*'");
+                outstream.print(",");
+            }
+            outstream.println("},");
+        }
+        outstream.println();
     }
 
     public void process(int level, @Nonnull Stream<Integer> candidates) {
@@ -188,21 +214,27 @@ public class MtnQueensGenerator {
         if (selected.size() == n) {
             if (isConsistent(selected)) {
                 solutions++;
-                if (checkCanonical){
+
+                // Canonical
+                boolean canonical = false;
+                if (checkCanonical) {
                     if (isCanonical(selected.iterator(), n)){
                         canonicalSolutions++;
-                        printSolution(selected, level);
+                        canonical = true;
                     }
-                } else {
-                    printSolution(selected, level);
                 }
+
+                // Torus
+                boolean torus = false;
                 if (checkTorus) {
                     TorusChecker torusChecker = new TorusChecker(n);
                     if (torusChecker.isTorus(selected.iterator())) {
                         torusSolutions++;
-                        logger.info("Found torus solution : {}", ReportUtils.formatQueens(selected.stream()));
+                        torus = true;
                     }
                 }
+
+                printSolution(selected, level, canonical, torus);
             }
         } else {
             // dequeA       newCandidate      dequeB
@@ -232,24 +264,32 @@ public class MtnQueensGenerator {
 
     public static void main(String[] args) {
         if (args.length==0){
-            out.println("Usage: java -jar QueenProblem-XX.YYYY.jar DESK_SIZE [CC] [PR] [PD] [PS]");
+            out.println("Usage: java -jar QueenProblem-XX.YYYY.jar DESK_SIZE [CT] [CC] [FT | FC] [PD] [PS] [SO]");
             out.println("Where:");
             out.println("     DESK_SIZE       : size of desk (4,5,6, e.t.c)");
-            out.println("     CC              : check and print only canonical solutions (string)");
+            out.println("     CT              : check torus solutions");
+            out.println("     CC              : check canonical solutions");
+
+            out.println("     FT or FC        : filter torus or canonical during print");
+
             out.println("     PD              : print detailed report like a matrix (string)");
             out.println("     PS              : print summary report (string)");
-            out.println("     CT              : check torus");
+
             out.println("     SO              : suppress all text output");
         } else {
             Instant start = Instant.now();
             MtnQueensGenerator generator = new MtnQueensGenerator(parseInt(args[0]));
             int argcnt = 1;
             while(argcnt < args.length) {
-                if ("CT".equalsIgnoreCase(args[argcnt])) generator.checkTorus     = true;
-                if ("CC".equalsIgnoreCase(args[argcnt])) generator.checkCanonical = true;
-                if ("PD".equalsIgnoreCase(args[argcnt])) generator.printDetailed  = true;
-                if ("PS".equalsIgnoreCase(args[argcnt])) generator.printSummary   = true;
-                if ("SO".equalsIgnoreCase(args[argcnt])) generator.outstream      = new NullPrintStream(new NullOutputStream());
+                if ("CT".equalsIgnoreCase(args[argcnt])) generator.checkTorus      = true;
+                if ("CC".equalsIgnoreCase(args[argcnt])) generator.checkCanonical  = true;
+
+                if ("FC".equalsIgnoreCase(args[argcnt])) generator.filterCanonical = true;
+                if ("FT".equalsIgnoreCase(args[argcnt])) generator.filterTorus     = true;
+
+                if ("PD".equalsIgnoreCase(args[argcnt])) generator.printDetailed   = true;
+                if ("PS".equalsIgnoreCase(args[argcnt])) generator.printSummary    = true;
+                if ("SO".equalsIgnoreCase(args[argcnt])) generator.outstream       = new NullPrintStream(new NullOutputStream());
                 argcnt++;
             }
             generator.process(0, IntStream.range(0, generator.n).boxed());
@@ -258,7 +298,7 @@ public class MtnQueensGenerator {
                 out.println("=======================================================");
                 out.printf("Solutions           : %d\n", generator.solutions);
                 out.printf("Canonical solutions : %s\n", !generator.checkCanonical ? "Unknown" : valueOf(generator.canonicalSolutions));
-                out.printf("Torus solutions     : %d\n", generator.torusSolutions);
+                out.printf("Torus solutions     : %s\n", !generator.checkTorus ? "Unknown" : valueOf(generator.torusSolutions));
                 long elapsed = Duration.between(start, end).toMillis();
                 out.printf("Elapsed time   : %s ms\n", elapsed);
                 out.printf("AVG speed      : %d solutions/s\n", 1000L * generator.solutions / elapsed);
