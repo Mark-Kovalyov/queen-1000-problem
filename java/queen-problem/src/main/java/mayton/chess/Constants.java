@@ -8,4 +8,11 @@ public interface Constants {
 
     int MIN_QUEEN_DESK_SIZE = 5;
 
+    int QUEEN_DESK_SIZE = 1000;
+
+    int CELL_SIZE = 4;
+
+    int VIDEO_WIDTH = 1366;
+    int VIDEO_HEIGHT = 768;
+
 }
